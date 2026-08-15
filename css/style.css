@@ -213,3 +213,63 @@ body {
         0 0 12px rgba(200, 168, 91, 0.35),
         0 0 30px rgba(117, 103, 217, 0.15);
 }
+
+/* =========================
+   ATMOSFERA ARCANA
+   ========================= */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(117, 103, 217, 0.14),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(200, 168, 91, 0.05),
+            transparent 45%
+        ),
+        var(--cor-fundo);
+}
+
+
+/* Brilho central da Essência */
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(117, 103, 217, 0.10),
+            transparent 65%
+        );
+
+    filter: blur(20px);
+
+    pointer-events: none;
+}
+
+
+/* Conteúdo permanece acima dos efeitos */
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
