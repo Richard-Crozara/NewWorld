@@ -1,0 +1,302 @@
+/* =========================
+   LOGIN
+   ========================= */
+
+.login-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+
+    box-sizing: border-box;
+
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(117, 103, 217, 0.12),
+            transparent 32%
+        ),
+        var(--cor-fundo);
+}
+
+
+/* =========================
+   CARD
+   ========================= */
+
+.login-card {
+    width: min(420px, 100%);
+
+    padding: 45px 42px;
+
+    box-sizing: border-box;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 30, 40, 0.96),
+            rgba(13, 17, 24, 0.98)
+        );
+
+    border: 1px solid var(--cor-borda);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        0 0 40px rgba(117, 103, 217, 0.08);
+}
+
+
+/* =========================
+   MARCA
+   ========================= */
+
+.login-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 12px;
+
+    color: var(--cor-texto);
+
+    text-decoration: none;
+
+    margin-bottom: 40px;
+}
+
+.login-brand img {
+    width: 58px;
+    height: 58px;
+
+    object-fit: contain;
+
+    display: block;
+
+    filter:
+        drop-shadow(
+            0 0 12px rgba(117, 103, 217, 0.45)
+        );
+}
+
+.login-brand span {
+    font-size: 14px;
+
+    letter-spacing: 5px;
+
+    color: var(--cor-dourado);
+}
+
+
+/* =========================
+   TÍTULO
+   ========================= */
+
+.login-heading {
+    text-align: center;
+
+    margin-bottom: 32px;
+}
+
+.login-overline {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 10px;
+
+    letter-spacing: 4px;
+
+    color: var(--cor-essencia-clara);
+}
+
+.login-heading h1 {
+    margin: 0;
+
+    font-size: 30px;
+
+    font-weight: 500;
+
+    letter-spacing: 1px;
+
+    color: var(--cor-texto);
+}
+
+.login-heading p {
+    margin: 12px 0 0;
+
+    font-size: 13px;
+
+    color: var(--cor-texto-secundario);
+}
+
+
+/* =========================
+   FORMULÁRIO
+   ========================= */
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.form-field label {
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    color: var(--cor-texto-secundario);
+}
+
+.form-field input {
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    background: rgba(8, 11, 17, 0.75);
+
+    border: 1px solid var(--cor-borda);
+
+    outline: none;
+
+    color: var(--cor-texto);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-field input::placeholder {
+    color: rgba(220, 220, 230, 0.35);
+}
+
+.form-field input:focus {
+    border-color: var(--cor-essencia);
+
+    box-shadow:
+        0 0 0 2px rgba(117, 103, 217, 0.08),
+        0 0 18px rgba(117, 103, 217, 0.12);
+}
+
+
+/* =========================
+   BOTÃO
+   ========================= */
+
+.login-button {
+    width: 100%;
+
+    height: 48px;
+
+    margin-top: 4px;
+
+    border: 1px solid var(--cor-dourado);
+
+    background: rgba(117, 103, 217, 0.08);
+
+    color: var(--cor-dourado-claro);
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.login-button:hover {
+    background: rgba(117, 103, 217, 0.16);
+
+    box-shadow:
+        0 0 20px rgba(117, 103, 217, 0.18);
+}
+
+.login-button:active {
+    transform: translateY(1px);
+}
+
+
+/* =========================
+   CRIAR CONTA
+   ========================= */
+
+.login-register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 28px;
+
+    font-size: 11px;
+
+    color: var(--cor-texto-secundario);
+}
+
+.login-register a {
+    color: var(--cor-dourado);
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        text-shadow 0.2s ease;
+}
+
+.login-register a:hover {
+    color: var(--cor-dourado-claro);
+
+    text-shadow:
+        0 0 10px rgba(200, 168, 91, 0.3);
+}
+
+
+/* =========================
+   CELULAR
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .login-page {
+        padding: 25px 16px;
+    }
+
+    .login-card {
+        padding: 35px 24px;
+    }
+
+    .login-brand {
+        margin-bottom: 32px;
+    }
+
+    .login-heading h1 {
+        font-size: 26px;
+    }
+
+}
