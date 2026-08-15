@@ -100,9 +100,16 @@ body {
 
     font-size: 22px;
 
-    transform: rotate(45deg);
-
     box-shadow: 0 0 12px rgba(117, 103, 217, 0.25);
+}
+
+.brand-symbol img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+  
+    display: block;
 }
 
 .brand-name {
