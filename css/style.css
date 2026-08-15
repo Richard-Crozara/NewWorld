@@ -45,7 +45,7 @@ body {
 body {
     background-color: var(--cor-fundo);
     color: var(--cor-texto);
-    font-family: Arial, sans-serif;
+    font-family: "Inter", sans-serif;
     text-align: center;
 }
 
@@ -156,7 +156,10 @@ body {
 
 .hero h1 {
     margin: 0;
-
+  
+    font-family: "Cinzel", serif;
+    font-weight: 600;
+  
     color: var(--cor-texto);
 
     font-size: clamp(48px, 8vw, 96px);
@@ -164,6 +167,9 @@ body {
     letter-spacing: 10px;
 
     line-height: 1;
+
+
+  
 }
 
 .hero-subtitle {
