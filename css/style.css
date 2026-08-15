@@ -1,6 +1,42 @@
+:root {
+    /* FUNDOS */
+    --cor-fundo: #0b0e14;
+    --cor-superficie: #151a23;
+    --cor-superficie-secundaria: #1c222d;
+
+    /* TEXTOS */
+    --cor-texto: #f0eee8;
+    --cor-texto-secundario: #a7a9b0;
+
+    /* ESSÊNCIA ARCANA */
+    --cor-essencia: #7567d9;
+    --cor-essencia-clara: #9b8cff;
+
+    /* DOURADO ARCANO */
+    --cor-dourado: #c8a85b;
+    --cor-dourado-claro: #e2c879;
+
+    /* BORDAS */
+    --cor-borda: #343b49;
+
+    /* ELEMENTOS */
+    --elemento-luz: #fff2a6;
+    --elemento-cura: #e88ca8;
+    --elemento-escuridao: #302d4f;
+    --elemento-umbramancia: #65447d;
+    --elemento-fogo: #e05a32;
+    --elemento-raio: #f2d34f;
+    --elemento-agua: #4287c5;
+    --elemento-gelo: #8bd7ed;
+    --elemento-terra: #9b8150;
+    --elemento-metal: #9da4ad;
+    --elemento-vento: #64c9d2;
+    --elemento-etereo: #b5a4e8;
+}
+
 body {
-    background-color: #11131a;
-    color: white;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
     font-family: Arial, sans-serif;
     text-align: center;
     padding-top: 100px;
