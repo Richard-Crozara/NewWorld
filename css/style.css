@@ -427,6 +427,25 @@ body {
     pointer-events: none;
 }
 
+.hero::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image: url("../assets/images/background.png");
+
+    background-size: cover;
+    background-position: center;
+
+    opacity: 0.55;
+
+    z-index: 0;
+
+    pointer-events: none;
+}
+
 
 /* Conteúdo permanece acima dos efeitos */
 
@@ -442,6 +461,8 @@ body {
 .quick-links {
     position: absolute;
 
+    z-index: 2;
+  
     bottom: 45px;
     left: 50%;
 
