@@ -1,1 +1,7 @@
-
+body {
+    background-color: #11131a;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 100px;
+}
