@@ -394,3 +394,74 @@ body {
     text-shadow:
         0 0 8px rgba(117, 103, 217, 0.6);
 }
+
+/* =========================
+   RESPONSIVIDADE — CELULAR
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .topbar {
+        height: 64px;
+        padding: 0 20px;
+    }
+
+    .brand-symbol {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+
+    .brand-name strong {
+        font-size: 17px;
+    }
+
+    .hero {
+        min-height: calc(100vh - 64px);
+
+        padding: 30px 20px 120px;
+    }
+
+    .hero-overline {
+        font-size: 11px;
+        letter-spacing: 4px;
+    }
+
+    .hero h1 {
+        font-size: clamp(38px, 13vw, 64px);
+        letter-spacing: 5px;
+    }
+
+    .hero-subtitle {
+        margin: 18px 0 28px;
+
+        font-size: 15px;
+    }
+
+    .hero-button {
+        padding: 14px 26px;
+        font-size: 12px;
+    }
+
+    .quick-links {
+        bottom: 25px;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 8px;
+
+        width: calc(100% - 40px);
+    }
+
+    .quick-link {
+        width: 100%;
+        height: 58px;
+
+        font-size: 11px;
+    }
+
+    .quick-icon {
+        font-size: 16px;
+    }
+}
