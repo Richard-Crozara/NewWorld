@@ -92,7 +92,11 @@
         <!-- campanhas reais aparecerão aqui -->
 
 
-            <button class="create-campaign">
+            <button
+                type="button"
+                class="create-campaign"
+                id="open-create-campaign"
+            >
 
                 <span class="create-symbol">
                     +
@@ -129,6 +133,76 @@
 
     </main>
 
+    <div
+    class="campaign-modal"
+    id="create-campaign-modal"
+    hidden
+>
+    <div class="campaign-modal-content">
+
+        <button
+            type="button"
+            class="campaign-modal-close"
+            id="close-create-campaign"
+            aria-label="Fechar"
+        >
+            ×
+        </button>
+
+        <span class="dashboard-overline">
+            NEW WORLD
+        </span>
+
+        <h2>
+            Criar campanha
+        </h2>
+
+        <p>
+            Dê um nome à sua nova aventura.
+        </p>
+
+        <form id="create-campaign-form">
+
+            <div class="form-field">
+
+                <label for="campaign-name">
+                    Nome da campanha
+                </label>
+
+                <input
+                    type="text"
+                    id="campaign-name"
+                    maxlength="100"
+                    required
+                >
+
+            </div>
+
+            <div class="form-field">
+
+                <label for="campaign-description">
+                    Descrição
+                </label>
+
+                <textarea
+                    id="campaign-description"
+                    rows="4"
+                    placeholder="Opcional"
+                ></textarea>
+
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                CRIAR CAMPANHA
+            </button>
+
+        </form>
+
+    </div>
+</div>
 
     <script src="js/app.js"></script>
     <script src="js/dashboard.js"></script> 
