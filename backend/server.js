@@ -151,6 +151,37 @@ return res.status(200).json({
     }
 });
 
+app.get("/api/me", (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        return res.status(200).json({
+            user: {
+                id: decoded.id,
+                username: decoded.username
+            }
+        });
+
+    } catch (error) {
+        return res.status(401).json({
+            erro: "Token inválido ou expirado."
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
