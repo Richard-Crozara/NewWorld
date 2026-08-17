@@ -1,5 +1,3 @@
-console.log("register.js carregado!");
-
 const registerForm = document.getElementById("register-form");
 
 registerForm.addEventListener("submit", async (event) => {

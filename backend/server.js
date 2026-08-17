@@ -1,9 +1,14 @@
 const express = require("express");
+const cors = require("cors");
 const bcrypt = require("bcrypt");
 const pool = require("./db");
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors({
+    origin: "https://richard-crozara.github.io"
+}));
 
 app.use(express.json());
 
