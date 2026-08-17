@@ -13,6 +13,63 @@ const createCampaignModal =
 const closeCreateCampaignButton =
     document.getElementById("close-create-campaign");
 
+const createCampaignForm =
+    document.getElementById("create-campaign-form");
+
+const campaignNameInput =
+    document.getElementById("campaign-name");
+
+const campaignDescriptionInput =
+    document.getElementById("campaign-description");
+
+createCampaignForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const name = campaignNameInput.value.trim();
+    const description =
+        campaignDescriptionInput.value.trim();
+
+    try {
+        const response = await fetch(
+            "http://localhost:3000/api/campaigns",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    name,
+                    description
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(
+                data.erro ||
+                "Não foi possível criar a campanha."
+            );
+
+            return;
+        }
+
+        alert("Campanha criada com sucesso!");
+
+        createCampaignForm.reset();
+
+        createCampaignModal.hidden = true;
+
+        loadCampaigns();
+
+    } catch (error) {
+        console.error("Erro ao criar campanha:", error);
+
+        alert("Não foi possível conectar ao servidor.");
+    }
+});
 
 if (!token) {
     window.location.href = "login.html";
