@@ -2,32 +2,126 @@ const token = localStorage.getItem("newworld_token");
 
 const loggedUser = document.getElementById("logged-user");
 const logoutButton = document.getElementById("logout-button");
+const campaignGrid = document.querySelector(".campaign-grid");
 
 if (!token) {
     window.location.href = "login.html";
 } else {
-    fetch("http://localhost:3000/api/me", {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-        .then(async (response) => {
-            if (!response.ok) {
-                localStorage.removeItem("newworld_token");
-                window.location.href = "login.html";
-                return;
+    loadUser();
+    loadCampaigns();
+}
+
+async function loadUser() {
+    try {
+        const response = await fetch("http://localhost:3000/api/me", {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
+        });
 
-            const data = await response.json();
-
-            loggedUser.textContent = `Conectado como: ${data.user.username}`;
-        })
-        .catch((error) => {
-            console.error("Erro ao verificar autenticação:", error);
-
+        if (!response.ok) {
             localStorage.removeItem("newworld_token");
             window.location.href = "login.html";
-        });
+            return;
+        }
+
+        const data = await response.json();
+
+        loggedUser.textContent =
+            `Conectado como: ${data.user.username}`;
+
+    } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+
+        localStorage.removeItem("newworld_token");
+        window.location.href = "login.html";
+    }
+}
+
+async function loadCampaigns() {
+    try {
+        const response = await fetch(
+            "http://localhost:3000/api/campaigns",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Não foi possível buscar campanhas.");
+        }
+
+        const data = await response.json();
+
+        renderCampaigns(data.campaigns);
+
+    } catch (error) {
+        console.error("Erro ao carregar campanhas:", error);
+    }
+}
+
+function renderCampaigns(campaigns) {
+    const existingCampaigns =
+        campaignGrid.querySelectorAll(".campaign-card");
+
+    existingCampaigns.forEach((campaign) => {
+        campaign.remove();
+    });
+
+    campaigns.forEach((campaign) => {
+        const campaignCard = document.createElement("article");
+
+        campaignCard.classList.add("campaign-card");
+
+        campaignCard.innerHTML = `
+            <div class="campaign-card-top">
+
+                <span class="campaign-status">
+                    ATIVA
+                </span>
+
+                <span class="campaign-members">
+                    ${campaign.role === "MASTER"
+                        ? "Mestre"
+                        : "Jogador"}
+                </span>
+
+            </div>
+
+            <h2>
+                ${campaign.name}
+            </h2>
+
+            <p>
+                ${campaign.description ||
+                    "Sem descrição."}
+            </p>
+
+            <div class="campaign-footer">
+
+                <span>
+                    ${campaign.role === "MASTER"
+                        ? "Você é o mestre"
+                        : "Você é jogador"}
+                </span>
+
+                <button>
+                    ENTRAR
+                </button>
+
+            </div>
+        `;
+
+        const createCampaignButton =
+            campaignGrid.querySelector(".create-campaign");
+
+        campaignGrid.insertBefore(
+            campaignCard,
+            createCampaignButton
+        );
+    });
 }
 
 logoutButton.addEventListener("click", (event) => {
