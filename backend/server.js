@@ -268,6 +268,52 @@ app.post("/api/campaigns", async (req, res) => {
     }
 });
 
+app.get("/api/campaigns", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const result = await pool.query(
+            `SELECT
+                campaigns.id,
+                campaigns.name,
+                campaigns.description,
+                campaigns.invite_code,
+                campaigns.created_at,
+                campaign_members.role
+             FROM campaigns
+             INNER JOIN campaign_members
+                ON campaigns.id = campaign_members.campaign_id
+             WHERE campaign_members.user_id = $1
+             ORDER BY campaigns.created_at DESC`,
+            [decoded.id]
+        );
+
+        return res.status(200).json({
+            campaigns: result.rows
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar campanhas:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível buscar as campanhas."
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
