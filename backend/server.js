@@ -82,6 +82,62 @@ app.post("/api/register", async (req, res) => {
     }
 });
 
+app.post("/api/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                erro: "Preencha e-mail e senha."
+            });
+        }
+
+        const normalizedEmail = email.trim().toLowerCase();
+
+        const result = await pool.query(
+            `SELECT id, username, email, password
+             FROM users
+             WHERE email = $1`,
+            [normalizedEmail]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(401).json({
+                erro: "E-mail ou senha incorretos."
+            });
+        }
+
+        const user = result.rows[0];
+
+        const passwordMatches = await bcrypt.compare(
+            password,
+            user.password
+        );
+
+        if (!passwordMatches) {
+            return res.status(401).json({
+                erro: "E-mail ou senha incorretos."
+            });
+        }
+
+        return res.status(200).json({
+            mensagem: "Login realizado com sucesso!",
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email
+            }
+        });
+
+    } catch (error) {
+        console.error("Erro ao fazer login:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível realizar o login."
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
