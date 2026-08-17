@@ -113,7 +113,11 @@
             </button>
 
 
-            <button class="join-campaign">
+            <button
+                type="button"
+                class="join-campaign"
+                id="open-join-campaign"
+            >
 
                 <span class="create-symbol">
                     ◇
@@ -197,6 +201,64 @@
                 class="login-button"
             >
                 CRIAR CAMPANHA
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<div
+    class="campaign-modal"
+    id="join-campaign-modal"
+    hidden
+>
+    <div class="campaign-modal-content">
+
+        <button
+            type="button"
+            class="campaign-modal-close"
+            id="close-join-campaign"
+            aria-label="Fechar"
+        >
+            ×
+        </button>
+
+        <span class="dashboard-overline">
+            NEW WORLD
+        </span>
+
+        <h2>
+            Entrar em campanha
+        </h2>
+
+        <p>
+            Digite o código de convite fornecido pelo mestre.
+        </p>
+
+        <form id="join-campaign-form">
+
+            <div class="form-field">
+
+                <label for="invite-code">
+                    Código de convite
+                </label>
+
+                <input
+                    type="text"
+                    id="invite-code"
+                    maxlength="20"
+                    placeholder="Ex: NW7K9X"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                ENTRAR NA CAMPANHA
             </button>
 
         </form>

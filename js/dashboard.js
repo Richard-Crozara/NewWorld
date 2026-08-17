@@ -22,6 +22,21 @@ const campaignNameInput =
 const campaignDescriptionInput =
     document.getElementById("campaign-description");
 
+const openJoinCampaignButton =
+    document.getElementById("open-join-campaign");
+
+const joinCampaignModal =
+    document.getElementById("join-campaign-modal");
+
+const closeJoinCampaignButton =
+    document.getElementById("close-join-campaign");
+
+const joinCampaignForm =
+    document.getElementById("join-campaign-form");
+
+const inviteCodeInput =
+    document.getElementById("invite-code");
+
 createCampaignForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -201,6 +216,14 @@ openCreateCampaignButton.addEventListener("click", () => {
 
 closeCreateCampaignButton.addEventListener("click", () => {
     createCampaignModal.hidden = true;
+});
+
+openJoinCampaignButton.addEventListener("click", () => {
+    joinCampaignModal.hidden = false;
+});
+
+closeJoinCampaignButton.addEventListener("click", () => {
+    joinCampaignModal.hidden = true;
 });
 
 campaignGrid.addEventListener("click", (event) => {

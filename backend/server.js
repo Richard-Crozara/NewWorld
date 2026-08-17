@@ -377,6 +377,93 @@ app.get("/api/campaigns/:id", async (req, res) => {
     }
 });
 
+app.post("/api/campaigns/join", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const { inviteCode } = req.body;
+
+        if (!inviteCode || !inviteCode.trim()) {
+            return res.status(400).json({
+                erro: "Digite um código de convite."
+            });
+        }
+
+        const normalizedInviteCode =
+            inviteCode.trim().toUpperCase();
+
+        const campaignResult = await pool.query(
+            `SELECT id, name
+             FROM campaigns
+             WHERE invite_code = $1`,
+            [normalizedInviteCode]
+        );
+
+        if (campaignResult.rows.length === 0) {
+            return res.status(404).json({
+                erro: "Código de convite inválido."
+            });
+        }
+
+        const campaign = campaignResult.rows[0];
+
+        const existingMember = await pool.query(
+            `SELECT campaign_id
+             FROM campaign_members
+             WHERE campaign_id = $1
+             AND user_id = $2`,
+            [campaign.id, decoded.id]
+        );
+
+        if (existingMember.rows.length > 0) {
+            return res.status(409).json({
+                erro: "Você já participa desta campanha."
+            });
+        }
+
+        await pool.query(
+            `INSERT INTO campaign_members (
+                campaign_id,
+                user_id,
+                role
+            )
+            VALUES ($1, $2, 'PLAYER')`,
+            [
+                campaign.id,
+                decoded.id
+            ]
+        );
+
+        return res.status(200).json({
+            mensagem: "Você entrou na campanha com sucesso!",
+            campaign: {
+                id: campaign.id,
+                name: campaign.name
+            }
+        });
+
+    } catch (error) {
+        console.error("Erro ao entrar na campanha:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível entrar na campanha."
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
