@@ -182,6 +182,92 @@ app.get("/api/me", (req, res) => {
     }
 });
 
+app.post("/api/campaigns", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const { name, description } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({
+                erro: "O nome da campanha é obrigatório."
+            });
+        }
+
+        const normalizedName = name.trim();
+        const normalizedDescription = description
+            ? description.trim()
+            : null;
+
+        const inviteCode = Math.random()
+            .toString(36)
+            .substring(2, 10)
+            .toUpperCase();
+
+        const client = await pool.connect();
+
+        try {
+            await client.query("BEGIN");
+
+            const campaignResult = await client.query(
+                `INSERT INTO campaigns (name, description, invite_code)
+                 VALUES ($1, $2, $3)
+                 RETURNING id, name, description, invite_code, created_at`,
+                [
+                    normalizedName,
+                    normalizedDescription,
+                    inviteCode
+                ]
+            );
+
+            const campaign = campaignResult.rows[0];
+
+            await client.query(
+                `INSERT INTO campaign_members (campaign_id, user_id, role)
+                 VALUES ($1, $2, 'MASTER')`,
+                [
+                    campaign.id,
+                    decoded.id
+                ]
+            );
+
+            await client.query("COMMIT");
+
+            return res.status(201).json({
+                mensagem: "Campanha criada com sucesso!",
+                campaign
+            });
+
+        } catch (error) {
+            await client.query("ROLLBACK");
+            throw error;
+
+        } finally {
+            client.release();
+        }
+
+    } catch (error) {
+        console.error("Erro ao criar campanha:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível criar a campanha."
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
