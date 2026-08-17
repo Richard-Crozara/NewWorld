@@ -314,6 +314,69 @@ app.get("/api/campaigns", async (req, res) => {
     }
 });
 
+app.get("/api/campaigns/:id", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const campaignId = parseInt(req.params.id);
+
+        if (!Number.isInteger(campaignId) || campaignId <= 0) {
+            return res.status(400).json({
+                erro: "ID da campanha inválido."
+            });
+        }
+
+        const result = await pool.query(
+            `SELECT
+                campaigns.id,
+                campaigns.name,
+                campaigns.description,
+                campaigns.invite_code,
+                campaigns.created_at,
+                campaign_members.role
+             FROM campaigns
+             INNER JOIN campaign_members
+                ON campaigns.id = campaign_members.campaign_id
+             WHERE campaigns.id = $1
+             AND campaign_members.user_id = $2`,
+            [
+                campaignId,
+                decoded.id
+            ]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(403).json({
+                erro: "Você não possui acesso a esta campanha."
+            });
+        }
+
+        return res.status(200).json({
+            campaign: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error("Erro ao acessar campanha:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível acessar a campanha."
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

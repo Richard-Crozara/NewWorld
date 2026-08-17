@@ -174,7 +174,11 @@ function renderCampaigns(campaigns) {
                         : "Você é jogador"}
                 </span>
 
-                <button>
+                <button
+                    type="button"
+                    class="enter-campaign-button"
+                    data-campaign-id="${campaign.id}"
+                >
                     ENTRAR
                 </button>
 
@@ -197,6 +201,22 @@ openCreateCampaignButton.addEventListener("click", () => {
 
 closeCreateCampaignButton.addEventListener("click", () => {
     createCampaignModal.hidden = true;
+});
+
+campaignGrid.addEventListener("click", (event) => {
+    const enterButton = event.target.closest(
+        ".enter-campaign-button"
+    );
+
+    if (!enterButton) {
+        return;
+    }
+
+    const campaignId =
+        enterButton.dataset.campaignId;
+
+    window.location.href =
+        `campaign.html?id=${campaignId}`;
 });
 
 logoutButton.addEventListener("click", (event) => {
