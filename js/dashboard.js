@@ -4,6 +4,16 @@ const loggedUser = document.getElementById("logged-user");
 const logoutButton = document.getElementById("logout-button");
 const campaignGrid = document.querySelector(".campaign-grid");
 
+const openCreateCampaignButton =
+    document.getElementById("open-create-campaign");
+
+const createCampaignModal =
+    document.getElementById("create-campaign-modal");
+
+const closeCreateCampaignButton =
+    document.getElementById("close-create-campaign");
+
+
 if (!token) {
     window.location.href = "login.html";
 } else {
@@ -123,6 +133,14 @@ function renderCampaigns(campaigns) {
         );
     });
 }
+
+openCreateCampaignButton.addEventListener("click", () => {
+    createCampaignModal.hidden = false;
+});
+
+closeCreateCampaignButton.addEventListener("click", () => {
+    createCampaignModal.hidden = true;
+});
 
 logoutButton.addEventListener("click", (event) => {
     event.preventDefault();
