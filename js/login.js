@@ -25,9 +25,15 @@ loginForm.addEventListener("submit", async (event) => {
             return;
         }
 
-        alert("Login realizado com sucesso!");
+        localStorage.setItem("newworld_token", data.token);
 
-        window.location.href = "dashboard.html";
+alert("Login realizado com sucesso!");
+
+window.location.href = "dashboard.html";
+
+alert("Login realizado com sucesso!");
+
+window.location.href = "dashboard.html";
 
     } catch (error) {
         console.error("Erro ao fazer login:", error);
