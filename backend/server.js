@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const pool = require("./db");
 
 const app = express();
@@ -120,14 +121,26 @@ app.post("/api/login", async (req, res) => {
             });
         }
 
-        return res.status(200).json({
-            mensagem: "Login realizado com sucesso!",
-            user: {
-                id: user.id,
-                username: user.username,
-                email: user.email
-            }
-        });
+        const token = jwt.sign(
+    {
+        id: user.id,
+        username: user.username
+    },
+    process.env.JWT_SECRET,
+    {
+        expiresIn: "7d"
+    }
+);
+
+return res.status(200).json({
+    mensagem: "Login realizado com sucesso!",
+    token,
+    user: {
+        id: user.id,
+        username: user.username,
+        email: user.email
+    }
+});
 
     } catch (error) {
         console.error("Erro ao fazer login:", error);
