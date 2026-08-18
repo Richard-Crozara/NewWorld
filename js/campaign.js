@@ -16,6 +16,11 @@ const inviteCode =
 const copyInviteCodeButton =
     document.getElementById("copy-invite-code");
 
+const membersCount =
+    document.getElementById("members-count");
+
+const membersList =
+    document.getElementById("members-list");
 
 const params = new URLSearchParams(window.location.search);
 
@@ -27,6 +32,7 @@ if (!token) {
     window.location.href = "dashboard.html";
 } else {
     loadCampaign();
+    loadMembers();
 }
 
 async function loadCampaign() {
@@ -76,6 +82,78 @@ async function loadCampaign() {
 
         window.location.href = "dashboard.html";
     }
+}
+
+async function loadMembers() {
+    try {
+        const response = await fetch(
+            `http://localhost:3000/api/campaigns/${campaignId}/members`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.erro ||
+                "Não foi possível carregar os participantes."
+            );
+        }
+
+        renderMembers(data.members);
+
+    } catch (error) {
+        console.error(
+            "Erro ao carregar participantes:",
+            error
+        );
+
+        membersCount.textContent = "0";
+
+        membersList.innerHTML = `
+            <p class="empty-message">
+                Não foi possível carregar os participantes.
+            </p>
+        `;
+    }
+}
+
+function renderMembers(members) {
+    membersCount.textContent = members.length;
+
+    membersList.innerHTML = "";
+
+    members.forEach((member) => {
+        const memberElement =
+            document.createElement("div");
+
+        memberElement.classList.add("member-item");
+
+        const role =
+            member.role === "MASTER"
+                ? "MESTRE"
+                : "JOGADOR";
+
+        memberElement.innerHTML = `
+            <div class="member-info">
+
+                <span class="member-name">
+                    ${member.username}
+                </span>
+
+                <span class="member-role">
+                    ${role}
+                </span>
+
+            </div>
+        `;
+
+        membersList.appendChild(memberElement);
+    });
 }
 
 copyInviteCodeButton.addEventListener("click", async () => {

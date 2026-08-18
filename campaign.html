@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -13,7 +14,7 @@
     <title>Campanha — New World</title>
 
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/campaign.css">
 
 </head>
 
@@ -67,23 +68,40 @@
 
     </header>
 
-    <main class="dashboard">
 
-        <section class="dashboard-header">
+    <main class="campaign-page">
 
-            <span class="dashboard-overline">
-                CAMPANHA
-            </span>
+        <!-- CABEÇALHO -->
 
-            <h1 id="campaign-name">
-                Carregando campanha...
-            </h1>
+        <section class="campaign-page-header">
 
-            <p id="campaign-description">
-                Carregando informações...
-            </p>
+            <div>
+
+                <span class="dashboard-overline">
+                    CAMPANHA
+                </span>
+
+                <h1 id="campaign-name">
+                    Carregando campanha...
+                </h1>
+
+                <p id="campaign-description">
+                    Carregando informações...
+                </p>
+
+            </div>
+
+            <a
+                href="dashboard.html"
+                class="back-to-dashboard"
+            >
+                ← VOLTAR
+            </a>
 
         </section>
+
+
+        <!-- CÓDIGO DE CONVITE -->
 
         <section
             class="invite-section"
@@ -91,18 +109,22 @@
             hidden
         >
 
-            <span class="dashboard-overline">
-                CONVIDAR JOGADORES
-            </span>
+            <div>
 
-            <h2>
-                Código de convite
-            </h2>
+                <span class="dashboard-overline">
+                    CONVIDAR JOGADORES
+                </span>
 
-            <p>
-                Compartilhe este código com os jogadores que deseja
-                convidar para sua campanha.
-            </p>
+                <h2>
+                    Código de convite
+                </h2>
+
+                <p>
+                    Compartilhe este código com os jogadores
+                    que deseja convidar para sua campanha.
+                </p>
+
+            </div>
 
             <div class="invite-code-box">
 
@@ -121,10 +143,182 @@
 
         </section>
 
+
+        <!-- ÁREAS DA CAMPANHA -->
+
+        <section class="campaign-sections">
+
+
+            <!-- JOGADORES -->
+
+            <article class="campaign-panel">
+
+                <div class="campaign-panel-header">
+
+                    <div>
+
+                        <span class="dashboard-overline">
+                            PARTICIPANTES
+                        </span>
+
+                        <h2>
+                            Jogadores
+                        </h2>
+
+                    </div>
+
+                    <span
+                        class="campaign-count"
+                        id="members-count"
+                    >
+                        ...
+                    </span>
+
+                </div>
+
+                <div
+                    class="members-list"
+                    id="members-list"
+                >
+
+                    <p class="empty-message">
+                        Carregando participantes...
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- PERSONAGENS -->
+
+            <article class="campaign-panel">
+
+                <div class="campaign-panel-header">
+
+                    <div>
+
+                        <span class="dashboard-overline">
+                            AVENTUREIROS
+                        </span>
+
+                        <h2>
+                            Personagens
+                        </h2>
+
+                    </div>
+
+                    <a
+                        href="characters.html"
+                        class="campaign-panel-link"
+                    >
+                        VER PERSONAGENS →
+                    </a>
+
+                </div>
+
+                <div
+                    class="campaign-placeholder"
+                >
+
+                    <span>
+                        ◇
+                    </span>
+
+                    <p>
+                        Os personagens vinculados a esta campanha
+                        aparecerão aqui.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- SESSÕES -->
+
+            <article class="campaign-panel">
+
+                <div class="campaign-panel-header">
+
+                    <div>
+
+                        <span class="dashboard-overline">
+                            CRÔNICAS
+                        </span>
+
+                        <h2>
+                            Sessões
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="campaign-placeholder">
+
+                    <span>
+                        ◷
+                    </span>
+
+                    <p>
+                        O histórico e o gerenciamento de sessões
+                        serão adicionados aqui.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- COMBATE -->
+
+            <article class="campaign-panel">
+
+                <div class="campaign-panel-header">
+
+                    <div>
+
+                        <span class="dashboard-overline">
+                            CONFRONTO
+                        </span>
+
+                        <h2>
+                            Combate
+                        </h2>
+
+                    </div>
+
+                    <span class="campaign-locked">
+                        EM BREVE
+                    </span>
+
+                </div>
+
+                <div class="campaign-placeholder">
+
+                    <span>
+                        ⚔
+                    </span>
+
+                    <p>
+                        O painel de combate da campanha será
+                        construído aqui.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </section>
+
     </main>
 
+
+    <script src="js/app.js"></script>
     <script src="js/campaign.js"></script>
 
 </body>
 
 </html>
+```

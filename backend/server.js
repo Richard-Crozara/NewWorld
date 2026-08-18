@@ -510,6 +510,177 @@ app.get("/api/characters", async (req, res) => {
     }
 });
 
+app.post("/api/campaigns/join", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const { inviteCode } = req.body;
+
+        if (!inviteCode || !inviteCode.trim()) {
+            return res.status(400).json({
+                erro: "O código de convite é obrigatório."
+            });
+        }
+
+        const normalizedInviteCode =
+            inviteCode.trim().toUpperCase();
+
+        const campaignResult = await pool.query(
+            `SELECT id, name
+             FROM campaigns
+             WHERE invite_code = $1`,
+            [normalizedInviteCode]
+        );
+
+        if (campaignResult.rows.length === 0) {
+            return res.status(404).json({
+                erro: "Código de convite inválido."
+            });
+        }
+
+        const campaign = campaignResult.rows[0];
+
+        const memberResult = await pool.query(
+            `SELECT id
+             FROM campaign_members
+             WHERE campaign_id = $1
+             AND user_id = $2`,
+            [
+                campaign.id,
+                decoded.id
+            ]
+        );
+
+        if (memberResult.rows.length > 0) {
+            return res.status(409).json({
+                erro: "Você já participa desta campanha."
+            });
+        }
+
+        await pool.query(
+            `INSERT INTO campaign_members (
+                campaign_id,
+                user_id,
+                role
+            )
+            VALUES ($1, $2, 'PLAYER')`,
+            [
+                campaign.id,
+                decoded.id
+            ]
+        );
+
+        return res.status(200).json({
+            mensagem:
+                `Você entrou na campanha "${campaign.name}" com sucesso!`
+        });
+
+    } catch (error) {
+        console.error(
+            "Erro ao entrar na campanha:",
+            error
+        );
+
+        return res.status(500).json({
+            erro: "Não foi possível entrar na campanha."
+        });
+    }
+});
+
+
+app.get("/api/campaigns/:id/members", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const campaignId = parseInt(req.params.id);
+
+        if (
+            !Number.isInteger(campaignId) ||
+            campaignId <= 0
+        ) {
+            return res.status(400).json({
+                erro: "ID da campanha inválido."
+            });
+        }
+
+        const accessResult = await pool.query(
+            `SELECT id
+             FROM campaign_members
+             WHERE campaign_id = $1
+             AND user_id = $2`,
+            [
+                campaignId,
+                decoded.id
+            ]
+        );
+
+        if (accessResult.rows.length === 0) {
+            return res.status(403).json({
+                erro:
+                    "Você não possui acesso a esta campanha."
+            });
+        }
+
+        const membersResult = await pool.query(
+            `SELECT
+                users.id,
+                users.username,
+                campaign_members.role
+             FROM campaign_members
+             INNER JOIN users
+                ON users.id = campaign_members.user_id
+             WHERE campaign_members.campaign_id = $1
+             ORDER BY
+                CASE campaign_members.role
+                    WHEN 'MASTER' THEN 1
+                    ELSE 2
+                END,
+                users.username ASC`,
+            [campaignId]
+        );
+
+        return res.status(200).json({
+            members: membersResult.rows
+        });
+
+    } catch (error) {
+        console.error(
+            "Erro ao buscar participantes:",
+            error
+        );
+
+        return res.status(500).json({
+            erro:
+                "Não foi possível buscar os participantes."
+        });
+    }
+});
 
 app.post("/api/characters", async (req, res) => {
     const authHeader = req.headers.authorization;
