@@ -464,6 +464,173 @@ app.post("/api/campaigns/join", async (req, res) => {
     }
 });
 
+/* =========================
+   PERSONAGENS
+   ========================= */
+
+app.get("/api/characters", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const result = await pool.query(
+            `SELECT
+                id,
+                name,
+                created_at,
+                updated_at
+             FROM characters
+             WHERE user_id = $1
+             ORDER BY created_at DESC`,
+            [decoded.id]
+        );
+
+        return res.status(200).json({
+            characters: result.rows
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar personagens:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível buscar os personagens."
+        });
+    }
+});
+
+
+app.post("/api/characters", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const { name } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({
+                erro: "O nome do personagem é obrigatório."
+            });
+        }
+
+        const normalizedName = name.trim();
+
+        const result = await pool.query(
+            `INSERT INTO characters (user_id, name)
+             VALUES ($1, $2)
+             RETURNING
+                id,
+                user_id,
+                name,
+                created_at,
+                updated_at`,
+            [
+                decoded.id,
+                normalizedName
+            ]
+        );
+
+        return res.status(201).json({
+            mensagem: "Personagem criado com sucesso!",
+            character: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error("Erro ao criar personagem:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível criar o personagem."
+        });
+    }
+});
+
+
+app.get("/api/characters/:id", async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            erro: "Token não fornecido."
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const characterId = parseInt(req.params.id);
+
+        if (
+            !Number.isInteger(characterId) ||
+            characterId <= 0
+        ) {
+            return res.status(400).json({
+                erro: "ID do personagem inválido."
+            });
+        }
+
+        const result = await pool.query(
+            `SELECT
+                id,
+                user_id,
+                name,
+                created_at,
+                updated_at
+             FROM characters
+             WHERE id = $1
+             AND user_id = $2`,
+            [
+                characterId,
+                decoded.id
+            ]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                erro: "Personagem não encontrado."
+            });
+        }
+
+        return res.status(200).json({
+            character: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar personagem:", error);
+
+        return res.status(500).json({
+            erro: "Não foi possível buscar o personagem."
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
