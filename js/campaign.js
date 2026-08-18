@@ -107,3 +107,4 @@ logoutButton.addEventListener("click", (event) => {
 
     window.location.href = "login.html";
 });
+
