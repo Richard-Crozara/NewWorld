@@ -210,6 +210,52 @@ function renderCampaigns(campaigns) {
     });
 }
 
+joinCampaignForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const inviteCode = inviteCodeInput.value.trim();
+
+    try {
+        const response = await fetch(
+            "http://localhost:3000/api/campaigns/join",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    inviteCode
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(
+                data.erro ||
+                "Não foi possível entrar na campanha."
+            );
+
+            return;
+        }
+
+        alert(data.mensagem);
+
+        joinCampaignForm.reset();
+
+        joinCampaignModal.hidden = true;
+
+        loadCampaigns();
+
+    } catch (error) {
+        console.error("Erro ao entrar na campanha:", error);
+
+        alert("Não foi possível conectar ao servidor.");
+    }
+});
+
 openCreateCampaignButton.addEventListener("click", () => {
     createCampaignModal.hidden = false;
 });
