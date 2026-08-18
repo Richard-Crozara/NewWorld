@@ -7,6 +7,16 @@ const campaignDescription =
 const logoutButton =
     document.getElementById("logout-button");
 
+const inviteSection =
+    document.getElementById("invite-section");
+
+const inviteCode =
+    document.getElementById("invite-code");
+
+const copyInviteCodeButton =
+    document.getElementById("copy-invite-code");
+
+
 const params = new URLSearchParams(window.location.search);
 
 const campaignId = params.get("id");
@@ -51,6 +61,14 @@ async function loadCampaign() {
         document.title =
             `${data.campaign.name} — New World`;
 
+        if (data.campaign.role === "MASTER") {
+            inviteSection.hidden = false;
+
+            inviteCode.textContent =
+                data.campaign.invite_code;
+        }
+
+
     } catch (error) {
         console.error("Erro ao carregar campanha:", error);
 
@@ -59,6 +77,28 @@ async function loadCampaign() {
         window.location.href = "dashboard.html";
     }
 }
+
+copyInviteCodeButton.addEventListener("click", async () => {
+    try {
+        await navigator.clipboard.writeText(
+            inviteCode.textContent
+        );
+
+        copyInviteCodeButton.textContent = "COPIADO!";
+
+        setTimeout(() => {
+            copyInviteCodeButton.textContent = "COPIAR";
+        }, 2000);
+
+    } catch (error) {
+        console.error(
+            "Erro ao copiar código de convite:",
+            error
+        );
+
+        alert("Não foi possível copiar o código.");
+    }
+});
 
 logoutButton.addEventListener("click", (event) => {
     event.preventDefault();
